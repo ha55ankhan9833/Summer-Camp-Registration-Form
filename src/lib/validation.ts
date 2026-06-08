@@ -28,6 +28,20 @@ export const registrationSchema = z.object({
 
 export type RegistrationFormData = z.infer<typeof registrationSchema>
 
-export type StoredRegistration = RegistrationFormData & {
-  submittedAt: string
+export type StoredRegistration = {
+  id?: number
+  student_name: string
+  student_phone?: string
+  age: number
+  gender: 'male' | 'female'
+  current_class: string
+  school_name: string
+  parent_name: string
+  parent_contact: string
+  parent_email: string
+  emergency_contact: string
+  medical_condition?: string
+  payment_method: 'jazzcash' | 'cash'
+  screenshot_url?: string
+  created_at: string
 }
