@@ -247,7 +247,10 @@ const [submissions, setSubmissions] = useState<StoredRegistration[]>(() => {
                           {submission.student_name}
                         </h3>
                         <p className="text-sm text-brand-gray">
-                          Submitted: {submission.created_at ? new Date(submission.created_at).toLocaleString() : 'No date available'}
+                          Submitted: { submission.created_at
+    ? new Date(submission.created_at).toLocaleString()
+    : 'No date available'
+                          }
                         </p>
                       </div>
                       <button
@@ -425,7 +428,7 @@ const [submissions, setSubmissions] = useState<StoredRegistration[]>(() => {
               {[
                 { icon: Calendar, label: 'Duration', value: '4 Weeks' },
                 { icon: Users, label: 'Age Requirement', value: 'Under 18' },
-                { icon: CreditCard, label: 'Fee', value: 'PKR 10,000' },
+                { icon: CreditCard, label: 'Fee', value: 'PKR 12,000' },
                 { icon: MapPin, label: 'Location', value: 'On Campus' },
                 { icon: Award, label: 'Certificate', value: 'Included' },
                 { icon: Clock, label: 'Deadline', value: '20 June 2026'}
@@ -734,8 +737,7 @@ const [submissions, setSubmissions] = useState<StoredRegistration[]>(() => {
     </button>
   </div>
 )}
-                        <Upload className="w-6 h-6 text-primary-light mt-3" />
-                        <span className="text-brand-gray">Click to upload payment screenshot</span>
+                        
                       
                     </div>
                   </div>
