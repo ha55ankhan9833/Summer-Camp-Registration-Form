@@ -8,17 +8,22 @@ import { Button } from './components/ui/Button'
 import { Card } from './components/ui/Card'
 import { Input } from './components/ui/Input'
 import { Checkbox } from './components/ui/Checkbox'
+import { Clock } from 'lucide-react'
 import { registrationSchema, RegistrationFormData, StoredRegistration } from './lib/validation'
 
 function App() {
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [showAdmin, setShowAdmin] = useState(false)
-  const [showAdminLogin, setShowAdminLogin] = useState(false)
-  const [submissions, setSubmissions] = useState<StoredRegistration[]>(() => {
-    const saved = localStorage.getItem('campSubmissions')
-    return saved ? JSON.parse(saved) : []
-  })
+const [isSubmitting, setIsSubmitting] = useState(false)
+const [showAdmin, setShowAdmin] = useState(false)
+const [showAdminLogin, setShowAdminLogin] = useState(false)
+
+const [previewUrl, setPreviewUrl] = useState('')
+
+const [submissions, setSubmissions] = useState<StoredRegistration[]>(() => {
+  const saved = localStorage.getItem('campSubmissions')
+  return saved ? JSON.parse(saved) : []
+})
+  
 
   const {
     register,
@@ -65,6 +70,7 @@ function App() {
 
     const { error } = await supabase.from('registrations').insert({
       student_name: data.studentName,
+      student_phone: data.studentPhone,
       age: data.age,
       gender: data.gender,
       current_class: data.currentClass,
@@ -382,10 +388,11 @@ function App() {
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               {[
                 { icon: Calendar, label: 'Duration', value: '4 Weeks' },
-                { icon: Users, label: 'Age Requirement', value: '12 Years & Above' },
+                { icon: Users, label: 'Age Requirement', value: 'Under 18' },
                 { icon: CreditCard, label: 'Fee', value: 'PKR 10,000' },
                 { icon: MapPin, label: 'Location', value: 'On Campus' },
                 { icon: Award, label: 'Certificate', value: 'Included' },
+                { icon: Clock, label: 'Deadline', value: '20 June 2026'}
               ].map((detail, index) => (
                 <motion.div
                   key={detail.label}
@@ -420,8 +427,8 @@ function App() {
               },
               {
                 icon: Code,
-                title: 'Front-End Development',
-                items: ['HTML', 'CSS', 'Responsive Design', 'Portfolio Website'],
+                title: 'Web Development',
+                items: ['HTML', 'CSS', 'Java Script', 'Portfolio Website'],
               },
               {
                 icon: Puzzle,
@@ -430,8 +437,13 @@ function App() {
               },
               {
                 icon: Palette,
-                title: 'Digital Creativity & Design',
-                items: ['Canva', 'Posters', 'Logo Design', 'Social Media Design'],
+                title: 'English Language & Communication',
+                items: ['Spoken English Practice', 'Grammar & Vocabulary', 'Public Speaking Skills', 'Writing & Comprehension'],
+              },
+              {
+                icon: Palette,
+                title: 'Calligraphy',
+                items: ['Brush Pen Techniques', 'Modern Calligraphy Styles', 'Lettering Composition', 'Custom Art & Quotes'],
               },
             ].map((module) => (
               <Card key={module.title} hover className="p-6">
@@ -473,6 +485,14 @@ function App() {
                     error={errors.studentName?.message}
                     required
                   />
+                  <Input
+  label="Student Phone Number"
+  type="tel"
+  placeholder="03XXXXXXXXX"
+  {...register('studentPhone')}
+  error={errors.studentPhone?.message}
+  required
+/>
                   <Input
                     label="Age"
                     type="number"
@@ -635,19 +655,50 @@ function App() {
                     </label>
                     <div className="relative">
                       <input
-                        type="file"
-                        accept="image/*"
-                        {...register('paymentScreenshot')}
-                        className="hidden"
-                        id="paymentScreenshot"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      id="paymentScreenshot"
+                      {...register('paymentScreenshot')}
+                      onChange={(e) => {
+                      const file = e.target.files?.[0]
+                      if (file) {
+                      setPreviewUrl(URL.createObjectURL(file))
+                       }
+                       }}
                       />
-                      <label
-                        htmlFor="paymentScreenshot"
-                        className="flex items-center justify-center gap-3 p-6 rounded-xl border-2 border-dashed border-white/20 bg-white/5 cursor-pointer hover:bg-white/10 transition-all"
+                     <label
+                      htmlFor="paymentScreenshot"
+                      className="flex items-center justify-center gap-3 p-6 rounded-xl border-2 border-dashed border-brand-gray cursor-pointer"
                       >
-                        <Upload className="w-6 h-6 text-primary-light" />
-                        <span className="text-brand-gray">Click to upload payment screenshot</span>
+                      <Upload className="w-6 h-6 text-primary-light" />
+                  
+                      <span className="text-brand-gray">
+                       Click to upload payment screenshot
+                       </span>
                       </label>
+                      {previewUrl && (
+  <div className="mt-3">
+    <img
+      src={previewUrl}
+      alt="Payment Screenshot Preview"
+      className="rounded-lg max-h-48 border border-white/20"
+    />
+
+    <button
+      type="button"
+      onClick={() => {
+        setPreviewUrl('')
+      }}
+      className="mt-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm"
+    >
+      Remove Screenshot
+    </button>
+  </div>
+)}
+                        <Upload className="w-6 h-6 text-primary-light mt-3" />
+                        <span className="text-brand-gray">Click to upload payment screenshot</span>
+                      
                     </div>
                   </div>
                 </div>
