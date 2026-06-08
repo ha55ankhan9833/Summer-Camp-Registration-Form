@@ -12,6 +12,19 @@ import { Clock } from 'lucide-react'
 import { registrationSchema, RegistrationFormData, StoredRegistration } from './lib/validation'
 
 function App() {
+  const fetchSubmissions = async () => {
+  const { data, error } = await supabase
+    .from('registrations')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('Fetch error:', error)
+    return
+  }
+
+  setSubmissions(data || [])
+}
   const [isSubmitted, setIsSubmitted] = useState(false)
 const [isSubmitting, setIsSubmitting] = useState(false)
 const [showAdmin, setShowAdmin] = useState(false)
@@ -117,6 +130,7 @@ const [submissions, setSubmissions] = useState<StoredRegistration[]>(() => {
     if (username === 'admin' && password === 'coderaxo2026') {
       setShowAdminLogin(false)
       setShowAdmin(true)
+      fetchSubmissions()
     } else {
       alert('Invalid credentials')
     }
