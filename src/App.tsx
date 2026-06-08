@@ -29,8 +29,10 @@ function App() {
 const [isSubmitting, setIsSubmitting] = useState(false)
 const [showAdmin, setShowAdmin] = useState(false)
 const [showAdminLogin, setShowAdminLogin] = useState(false)
+const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
 const [previewUrl, setPreviewUrl] = useState('')
+
 
 const [submissions, setSubmissions] = useState<StoredRegistration[]>(() => {
   const saved = localStorage.getItem('campSubmissions')
@@ -62,7 +64,7 @@ const [submissions, setSubmissions] = useState<StoredRegistration[]>(() => {
     setIsSubmitting(true)
 
     let screenshotUrl = ''
-    const file = data.paymentScreenshot?.[0]
+    const file = selectedFile
 
     if (file) {
       const fileExt = file.name.split('.').pop()
@@ -242,10 +244,10 @@ const [submissions, setSubmissions] = useState<StoredRegistration[]>(() => {
                     <div className="flex justify-between items-start mb-4">
                       <div>
                         <h3 className="text-lg font-semibold text-brand-white">
-                          {submission.studentName}
+                          {submission.student_name}
                         </h3>
                         <p className="text-sm text-brand-gray">
-                          Submitted: {new Date(submission.submittedAt || '').toLocaleString()}
+                          Submitted: {new Date(submission.created_at || '').toLocaleString()}
                         </p>
                       </div>
                       <button
@@ -267,38 +269,58 @@ const [submissions, setSubmissions] = useState<StoredRegistration[]>(() => {
                       </div>
                       <div>
                         <p className="text-brand-gray mb-1">Class/Grade</p>
-                        <p className="text-brand-white font-medium">{submission.currentClass}</p>
+                        <p className="text-brand-white font-medium">{submission.current_class}</p>
                       </div>
                       <div>
                         <p className="text-brand-gray mb-1">School</p>
-                        <p className="text-brand-white font-medium">{submission.schoolName}</p>
+                        <p className="text-brand-white font-medium">{submission.school_name}</p>
                       </div>
                       <div>
                         <p className="text-brand-gray mb-1">Parent Name</p>
-                        <p className="text-brand-white font-medium">{submission.parentName}</p>
+                        <p className="text-brand-white font-medium">{submission.parent_name}</p>
                       </div>
                       <div>
                         <p className="text-brand-gray mb-1">Parent Contact</p>
-                        <p className="text-brand-white font-medium">{submission.parentContact}</p>
+                        <p className="text-brand-white font-medium">{submission.parent_contact}</p>
                       </div>
                       <div>
                         <p className="text-brand-gray mb-1">Parent Email</p>
-                        <p className="text-brand-white font-medium">{submission.parentEmail}</p>
+                        <p className="text-brand-white font-medium">{submission.parent_email}</p>
                       </div>
                       <div>
                         <p className="text-brand-gray mb-1">Emergency Contact</p>
-                        <p className="text-brand-white font-medium">{submission.emergencyContact}</p>
+                        <p className="text-brand-white font-medium">{submission.emergency_contact}</p>
                       </div>
                       <div>
                         <p className="text-brand-gray mb-1">Payment Method</p>
                         <p className="text-brand-white font-medium capitalize">
-                          {submission.paymentMethod?.replace('_', ' ')}
+                          {submission.payment_method?.replace('_', ' ')}
                         </p>
                       </div>
-                      {submission.medicalCondition && (
+                      {submission.screenshot_url && (
+  <div className="md:col-span-2 lg:col-span-3">
+    <p className="text-brand-gray mb-1">Payment Screenshot</p>
+
+    <img
+      src={submission.screenshot_url}
+      alt="Payment Screenshot"
+      className="mt-2 rounded-lg max-h-48 border border-white/20"
+    />
+
+    <a
+      href={submission.screenshot_url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-block mt-2 text-primary-light hover:underline text-sm"
+    >
+      Open Screenshot
+    </a>
+  </div>
+)}
+                      {submission.medical_condition && (
                         <div className="md:col-span-2 lg:col-span-3">
                           <p className="text-brand-gray mb-1">Medical Condition</p>
-                          <p className="text-brand-white font-medium">{submission.medicalCondition}</p>
+                          <p className="text-brand-white font-medium">{submission.medical_condition}</p>
                         </div>
                       )}
                     </div>
@@ -669,18 +691,20 @@ const [submissions, setSubmissions] = useState<StoredRegistration[]>(() => {
                     </label>
                     <div className="relative">
                       <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      id="paymentScreenshot"
-                      {...register('paymentScreenshot')}
-                      onChange={(e) => {
-                      const file = e.target.files?.[0]
-                      if (file) {
-                      setPreviewUrl(URL.createObjectURL(file))
-                       }
-                       }}
-                      />
+  type="file"
+  accept="image/*"
+  className="hidden"
+  id="paymentScreenshot"
+  onChange={(e) => {
+    const file = e.target.files?.[0]
+
+    if (file) {
+      setSelectedFile(file)
+      setPreviewUrl(URL.createObjectURL(file))
+      setValue('paymentScreenshot', e.target.files)
+    }
+  }}
+/>
                      <label
                       htmlFor="paymentScreenshot"
                       className="flex items-center justify-center gap-3 p-6 rounded-xl border-2 border-dashed border-brand-gray cursor-pointer"
