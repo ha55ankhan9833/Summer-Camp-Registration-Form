@@ -340,6 +340,7 @@ function App() {
           <p className="text-brand-gray max-w-3xl mx-auto text-base sm:text-lg leading-relaxed">
             Join an exciting 4-week summer program designed for students aged 12 years and above. Explore Artificial Intelligence, Front-End Development, Mathematics, and Digital Creativity through interactive learning, projects, competitions, and challenges.
           </p>
+          <p className="text-brand-gray max-w-3xl mx-auto text-base sm:text-lg leading-relaxed">Phone No/Whatsapp: +92 333 5580537 , +92 336 5069443</p>
         </motion.div>
 
         {/* Feature Badges */}
@@ -601,10 +602,16 @@ function App() {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-brand-gray mb-2">
-                      Payment Method <span className="text-red-400">*</span>
+                      Payment Method  <span className="text-red-400">*</span>
                     </label>
+                    <p className="text-brand-gray max-w-3xl text-base sm:text-lg leading-relaxed text-left"><b>Account Title:</b> Ali Rafaiye<br></br>
+                    <b>Payment Method:</b> Jazz Cash <br></br>
+                    <b>JazzCash Number:</b> 03335580537 <br></br><br></br>
+                    
+
+                    </p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                      {['easypaisa', 'jazzcash', 'bank_transfer', 'cash'].map((method) => (
+                      {['jazzcash','cash'].map((method) => (
                         <label key={method} className="cursor-pointer">
                           <input
                             type="radio"
