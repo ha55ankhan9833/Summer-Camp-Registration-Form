@@ -247,7 +247,7 @@ const [submissions, setSubmissions] = useState<StoredRegistration[]>(() => {
                           {submission.student_name}
                         </h3>
                         <p className="text-sm text-brand-gray">
-                          Submitted: {new Date(submission.created_at || '').toLocaleString()}
+                          Submitted: {submission.created_at ? new Date(submission.created_at).toLocaleString() : 'No date available'}
                         </p>
                       </div>
                       <button
