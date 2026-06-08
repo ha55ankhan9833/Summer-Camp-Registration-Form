@@ -758,7 +758,7 @@ const [submissions, setSubmissions] = useState<StoredRegistration[]>(() => {
                     error={errors.agreements?.accurateInfo?.message}
                   />
                   <Checkbox
-                    label="I understand the fee is PKR 10,000"
+                    label="I understand the fee is PKR 12,000"
                     checked={agreements.feeUnderstanding}
                     onChange={(checked) => setValue('agreements.feeUnderstanding', checked)}
                     error={errors.agreements?.feeUnderstanding?.message}
