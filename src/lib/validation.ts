@@ -6,7 +6,7 @@ export const registrationSchema = z.object({
   /^03[0-9]{9}$/,
   'Please enter a valid Pakistani mobile number (03XXXXXXXXX)'
 ),
-  age: z.number().min(12, 'Student must be at least 12 years old').max(25, 'Age must be 25 or below'),
+  age: z.number(),
   gender: z.enum(['male', 'female'], { required_error: 'Please select a gender' }),
   currentClass: z.string().min(1, 'Please enter your current class/grade'),
   schoolName: z.string().min(3, 'School name must be at least 3 characters'),
