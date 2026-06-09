@@ -110,11 +110,20 @@ const [submissions, setSubmissions] = useState<StoredRegistration[]>(() => {
   }
 }
 
-  const deleteSubmission = (index: number) => {
-    const newSubmissions = submissions.filter((_, i) => i !== index)
-    setSubmissions(newSubmissions)
-    localStorage.setItem('campSubmissions', JSON.stringify(newSubmissions))
+  const deleteSubmission = async (id: number) => {
+  const { error } = await supabase
+    .from('registrations')
+    .delete()
+    .eq('id', id)
+
+  if (error) {
+    console.error(error)
+    alert('Failed to delete record')
+    return
   }
+
+  fetchSubmissions()
+}
 
   const downloadSubmissions = () => {
     const dataStr = JSON.stringify(submissions, null, 2)
@@ -254,7 +263,7 @@ const [submissions, setSubmissions] = useState<StoredRegistration[]>(() => {
                         </p>
                       </div>
                       <button
-                        onClick={() => deleteSubmission(index)}
+                        onClick={() => submission.id && deleteSubmission(submission.id)}
                         className="text-red-400 hover:text-red-300 transition-colors"
                       >
                         <Trash2 className="w-5 h-5" />
